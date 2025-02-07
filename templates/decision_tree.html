@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decision Tree</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+            background-color: #FBEAE2; /* Set the background color to the desired hex value */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .box {
+            display: none;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        h1 {
+            color: #316094; /* Corporate Blue */
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #B31986; /* Corporate Pink */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #ED2863; /* Corporate Red */
+        }
+    </style>
+    <script>
+        const historyStack = [];
+
+        function nextQuestion(nextId) {
+            const currentVisible = document.querySelector('.visible');
+            if (currentVisible) {
+                historyStack.push(currentVisible.id);
+                currentVisible.classList.remove('visible');
+            }
+            document.getElementById(nextId).classList.add('visible');
+        }
+
+        function goBack() {
+            if (historyStack.length > 0) {
+                const currentVisible = document.querySelector('.visible');
+                currentVisible.classList.remove('visible');
+                const previousId = historyStack.pop();
+                document.getElementById(previousId).classList.add('visible');
+            }
+        }
+
+        function restart() {
+            historyStack.length = 0; // Clear the history
+            document.querySelectorAll('.box').forEach(box => box.classList.remove('visible'));
+            document.getElementById('question1').classList.add('visible');
+        }
+    </script>
+</head>
+<body>
+    <div class="main-container">
+        <div class="logo-area">
+            <img src="{{ url_for('static', filename='images/Logo-H-4C.jpg') }}" alt="Company Logo" class="logo">
+        </div>
+        <div class="container">
+            <h1>Decision Tree</h1>
+            <div id="question1" class="box visible">
+                <p>Initial Question: Pick 1, 2, or 3</p>
+                <button onclick="nextQuestion('question2a')">1</button>
+                <button onclick="nextQuestion('question2b')">2</button>
+                <button onclick="nextQuestion('question2c')">3</button>
+            </div>
+
+            <!-- Level 2 for 1, 2, 3 -->
+            <div id="question2a" class="box">
+                <p>Next Question for 1: Pick A, B, or C</p>
+                <button onclick="nextQuestion('question3aN')">A</button>
+                <button onclick="nextQuestion('question3bN')">B</button>
+                <button onclick="nextQuestion('question3cN')">C</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question2b" class="box">
+                <p>Next Question for 2: Pick A, B, or C</p>
+                <button onclick="nextQuestion('question3aS')">A</button>
+                <button onclick="nextQuestion('question3bS')">B</button>
+                <button onclick="nextQuestion('question3cS')">C</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question2c" class="box">
+                <p>Next Question for 3: Pick A, B, or C</p>
+                <button onclick="nextQuestion('question3aE')">A</button>
+                <button onclick="nextQuestion('question3bE')">B</button>
+                <button onclick="nextQuestion('question3cE')">C</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <!-- Level 3 for A, B, C -->
+            <div id="question3aN" class="box">
+                <p>Next Question for 1 -> A: Pick North or South</p>
+                <button onclick="nextQuestion('question4aNE')">North</button>
+                <button onclick="nextQuestion('question4aNS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3bN" class="box">
+                <p>Next Question for 1 -> B: Pick North or South</p>
+                <button onclick="nextQuestion('question4bNE')">North</button>
+                <button onclick="nextQuestion('question4bNS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3cN" class="box">
+                <p>Next Question for 1 -> C: Pick North or South</p>
+                <button onclick="nextQuestion('question4cNE')">North</button>
+                <button onclick="nextQuestion('question4cNS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3aS" class="box">
+                <p>Next Question for 2 -> A: Pick North or South</p>
+                <button onclick="nextQuestion('question4aSE')">North</button>
+                <button onclick="nextQuestion('question4aSS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3bS" class="box">
+                <p>Next Question for 2 -> B: Pick North or South</p>
+                <button onclick="nextQuestion('question4bSE')">North</button>
+                <button onclick="nextQuestion('question4bSS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3cS" class="box">
+                <p>Next Question for 2 -> C: Pick North or South</p>
+                <button onclick="nextQuestion('question4cSE')">North</button>
+                <button onclick="nextQuestion('question4cSS')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3aE" class="box">
+                <p>Next Question for 3 -> A: Pick North or South</p>
+                <button onclick="nextQuestion('question4aEN')">North</button>
+                <button onclick="nextQuestion('question4aES')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3bE" class="box">
+                <p>Next Question for 3 -> B: Pick North or South</p>
+                <button onclick="nextQuestion('question4bEN')">North</button>
+                <button onclick="nextQuestion('question4bES')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question3cE" class="box">
+                <p>Next Question for 3 -> C: Pick North or South</p>
+                <button onclick="nextQuestion('question4cEN')">North</button>
+                <button onclick="nextQuestion('question4cES')">South</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <!-- Level 4 for North or South -->
+            <div id="question4aNE" class="box">
+                <p>Final Question for 1 -> A -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result1aNEE')">East</button>
+                <button onclick="nextQuestion('result1aNEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4aNS" class="box">
+                <p>Final Question for 1 -> A -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result1aNSE')">East</button>
+                <button onclick="nextQuestion('result1aNSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bNE" class="box">
+                <p>Final Question for 1 -> B -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result1bNEE')">East</button>
+                <button onclick="nextQuestion('result1bNEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bNS" class="box">
+                <p>Final Question for 1 -> B -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result1bNSE')">East</button>
+                <button onclick="nextQuestion('result1bNSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cNE" class="box">
+                <p>Final Question for 1 -> C -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result1cNEE')">East</button>
+                <button onclick="nextQuestion('result1cNEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cNS" class="box">
+                <p>Final Question for 1 -> C -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result1cNSE')">East</button>
+                <button onclick="nextQuestion('result1cNSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4aSE" class="box">
+                <p>Final Question for 2 -> A -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result2aSEE')">East</button>
+                <button onclick="nextQuestion('result2aSEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4aSS" class="box">
+                <p>Final Question for 2 -> A -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result2aSSE')">East</button>
+                <button onclick="nextQuestion('result2aSSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bSE" class="box">
+                <p>Final Question for 2 -> B -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result2bSEE')">East</button>
+                <button onclick="nextQuestion('result2bSEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bSS" class="box">
+                <p>Final Question for 2 -> B -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result2bSSE')">East</button>
+                <button onclick="nextQuestion('result2bSSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cSE" class="box">
+                <p>Final Question for 2 -> C -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result2cSEE')">East</button>
+                <button onclick="nextQuestion('result2cSEW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cSS" class="box">
+                <p>Final Question for 2 -> C -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result2cSSE')">East</button>
+                <button onclick="nextQuestion('result2cSSW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4aEN" class="box">
+                <p>Final Question for 3 -> A -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result3aENE')">East</button>
+                <button onclick="nextQuestion('result3aENW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4aES" class="box">
+                <p>Final Question for 3 -> A -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result3aESE')">East</button>
+                <button onclick="nextQuestion('result3aESW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bEN" class="box">
+                <p>Final Question for 3 -> B -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result3bENE')">East</button>
+                <button onclick="nextQuestion('result3bENW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4bES" class="box">
+                <p>Final Question for 3 -> B -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result3bESE')">East</button>
+                <button onclick="nextQuestion('result3bESW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cEN" class="box">
+                <p>Final Question for 3 -> C -> North: Pick East or West</p>
+                <button onclick="nextQuestion('result3cENE')">East</button>
+                <button onclick="nextQuestion('result3cENW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="question4cES" class="box">
+                <p>Final Question for 3 -> C -> South: Pick East or West</p>
+                <button onclick="nextQuestion('result3cESE')">East</button>
+                <button onclick="nextQuestion('result3cESW')">West</button>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <!-- Results for all paths -->
+            <div id="result1aNEE" class="box">
+                <p>You picked 1 -> A -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1aNEW" class="box">
+                <p>You picked 1 -> A -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1aNSE" class="box">
+                <p>You picked 1 -> A -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1aNSW" class="box">
+                <p>You picked 1 -> A -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1bNEE" class="box">
+                <p>You picked 1 -> B -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1bNEW" class="box">
+                <p>You picked 1 -> B -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1bNSE" class="box">
+                <p>You picked 1 -> B -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1bNSW" class="box">
+                <p>You picked 1 -> B -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1cNEE" class="box">
+                <p>You picked 1 -> C -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1cNEW" class="box">
+                <p>You picked 1 -> C -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1cNSE" class="box">
+                <p>You picked 1 -> C -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result1cNSW" class="box">
+                <p>You picked 1 -> C -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2aSEE" class="box">
+                <p>You picked 2 -> A -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2aSEW" class="box">
+                <p>You picked 2 -> A -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2aSSE" class="box">
+                <p>You picked 2 -> A -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2aSSW" class="box">
+                <p>You picked 2 -> A -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2bSEE" class="box">
+                <p>You picked 2 -> B -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2bSEW" class="box">
+                <p>You picked 2 -> B -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2bSSE" class="box">
+                <p>You picked 2 -> B -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2bSSW" class="box">
+                <p>You picked 2 -> B -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2cSEE" class="box">
+                <p>You picked 2 -> C -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2cSEW" class="box">
+                <p>You picked 2 -> C -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2cSSE" class="box">
+                <p>You picked 2 -> C -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result2cSSW" class="box">
+                <p>You picked 2 -> C -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3aENE" class="box">
+                <p>You picked 3 -> A -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3aENW" class="box">
+                <p>You picked 3 -> A -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3aESE" class="box">
+                <p>You picked 3 -> A -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3aESW" class="box">
+                <p>You picked 3 -> A -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3bENE" class="box">
+                <p>You picked 3 -> B -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3bENW" class="box">
+                <p>You picked 3 -> B -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3bESE" class="box">
+                <p>You picked 3 -> B -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3bESW" class="box">
+                <p>You picked 3 -> B -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3cENE" class="box">
+                <p>You picked 3 -> C -> North -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3cENW" class="box">
+                <p>You picked 3 -> C -> North -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3cESE" class="box">
+                <p>You picked 3 -> C -> South -> East</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <div id="result3cESW" class="box">
+                <p>You picked 3 -> C -> South -> West</p>
+                <button onclick="goBack()">Back</button>
+            </div>
+
+            <button onclick="restart()">Restart</button>
+        </div>
+    </div>
+</body>
+</html>
